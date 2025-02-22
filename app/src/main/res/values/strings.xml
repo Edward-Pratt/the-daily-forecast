@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">The Daily Forecast</string>
+    <string name="AppName">The Daily Forecast</string>
+    <string name="finance_budget"><![CDATA[Finance & Budget]]></string>
+    <string name="news">News</string>
+    <string name="weather">Weather</string>
 </resources>
