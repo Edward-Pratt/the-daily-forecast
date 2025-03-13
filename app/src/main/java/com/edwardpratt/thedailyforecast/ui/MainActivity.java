@@ -1,26 +1,69 @@
 package com.edwardpratt.thedailyforecast.ui;
 
 import android.os.Bundle;
-
-import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import com.edwardpratt.thedailyforecast.databinding.ActivityMainBinding;
+import com.google.android.material.navigation.NavigationView;
 import com.edwardpratt.thedailyforecast.R;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends AppCompatActivity {
+    private ActivityMainBinding binding;
+    private ActionBarDrawerToggle toggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+
+        // Enable View Binding
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        // Set up Toolbar
+        setSupportActionBar(binding.toolbar);
+
+        // Set up Navigation Drawer
+        toggle = new ActionBarDrawerToggle(this, binding.drawerLayout, binding.toolbar,
+                R.string.nav_open, R.string.nav_close);
+        binding.drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+        // Handle Navigation Item Clicks
+        binding.navView.setNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.nav_weather) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new WeatherFragment())
+                        .commit();
+            } else if (id == R.id.nav_news) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new NewsFragment())
+                        .commit();
+            } else if (id == R.id.nav_finance) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new FinanceFragment())
+                        .commit();
+            }
+
+            binding.drawerLayout.closeDrawer(GravityCompat.START);
+            return true;
         });
+
+        // Load Default Fragment
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new WeatherFragment())
+                    .commit();
+            binding.navView.setCheckedItem(R.id.nav_weather);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        binding = null; // Prevent memory leaks
     }
 }

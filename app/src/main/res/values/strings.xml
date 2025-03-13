@@ -4,4 +4,7 @@
     <string name="finance_budget"><![CDATA[Finance & Budget]]></string>
     <string name="news">News</string>
     <string name="weather">Weather</string>
+    <string name="the_daily_forecast">The Daily Forecast</string>
+    <string name="nav_open">Open Navigation</string>
+    <string name="nav_close">Close Navigation</string>
 </resources>
