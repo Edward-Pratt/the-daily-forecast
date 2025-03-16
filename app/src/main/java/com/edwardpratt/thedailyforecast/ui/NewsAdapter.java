@@ -1,5 +1,8 @@
 package com.edwardpratt.thedailyforecast.ui;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,15 +13,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.edwardpratt.thedailyforecast.R;
 import com.edwardpratt.thedailyforecast.model.NewsArticle;
 
 import java.util.List;
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> {
-    private List<NewsArticle> newsList;
+    private final List<NewsArticle> newsList;
+    private final Context context;
 
-    public NewsAdapter(List<NewsArticle> newsList) {
+    public NewsAdapter(Context context, List<NewsArticle> newsList) {
+        this.context = context;
         this.newsList = newsList;
     }
 
@@ -35,19 +41,24 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         holder.title.setText(article.getTitle());
         holder.description.setText(article.getDescription());
 
-        // Load image using Glide
-        Glide.with(holder.itemView.getContext()).load(article.getImageUrl()).into(holder.image);
+        // Ensure context is valid and image URL is not null
+        if (article.getImageUrl() != null && !article.getImageUrl().isEmpty()) {
+            Glide.with(holder.itemView.getContext())
+                    .load(article.getImageUrl())
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(holder.image);
+        } else {
+        }
+
+        holder.itemView.setOnClickListener(v -> {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(article.getUrl()));
+            context.startActivity(browserIntent);
+        });
     }
 
     @Override
     public int getItemCount() {
-        return newsList.size();
-    }
-
-    public void updateNews(List<NewsArticle> newNews) {
-        newsList.clear();
-        newsList.addAll(newNews);
-        notifyDataSetChanged();
+        return newsList != null ? newsList.size() : 0;
     }
 
     static class NewsViewHolder extends RecyclerView.ViewHolder {
