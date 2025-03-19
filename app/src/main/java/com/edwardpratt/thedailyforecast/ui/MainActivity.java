@@ -1,13 +1,13 @@
 package com.edwardpratt.thedailyforecast.ui;
 
 import android.os.Bundle;
-import androidx.annotation.NonNull;
+
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
+
 import com.edwardpratt.thedailyforecast.databinding.ActivityMainBinding;
-import com.google.android.material.navigation.NavigationView;
+import com.edwardpratt.thedailyforecast.ui.weather.WeatherFragment;
 import com.edwardpratt.thedailyforecast.R;
 
 public class MainActivity extends AppCompatActivity {

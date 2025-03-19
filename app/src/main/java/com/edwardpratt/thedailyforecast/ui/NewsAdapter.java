@@ -38,20 +38,20 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
     @Override
     public void onBindViewHolder(@NonNull NewsViewHolder holder, int position) {
         NewsArticle article = newsList.get(position);
-        holder.title.setText(article.getTitle());
-        holder.description.setText(article.getDescription());
+        holder.title.setText(article.title);
+        holder.description.setText(article.description);
 
         // Ensure context is valid and image URL is not null
-        if (article.getImageUrl() != null && !article.getImageUrl().isEmpty()) {
+        if (!article.imageUrl.isEmpty()) {
             Glide.with(holder.itemView.getContext())
-                    .load(article.getImageUrl())
+                    .load(article.imageUrl)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(holder.image);
         } else {
         }
 
         holder.itemView.setOnClickListener(v -> {
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(article.getUrl()));
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(article.url));
             context.startActivity(browserIntent);
         });
     }

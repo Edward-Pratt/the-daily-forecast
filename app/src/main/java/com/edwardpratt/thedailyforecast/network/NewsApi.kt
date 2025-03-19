@@ -1,75 +1,59 @@
-package com.edwardpratt.thedailyforecast.network;
+package com.edwardpratt.thedailyforecast.network
 
-import android.content.Context;
+import android.content.Context
+import com.android.volley.Request
+import com.android.volley.VolleyError
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
+import com.edwardpratt.thedailyforecast.model.NewsArticle
+import org.json.JSONException
+import org.json.JSONObject
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-import com.edwardpratt.thedailyforecast.model.NewsArticle;
+class NewsApi(context: Context) {
+    private val requestQueue =
+        Volley.newRequestQueue(context.applicationContext)
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+    fun fetchNews(listener: NewsResponseListener) {
+        val request = JsonObjectRequest(
+            Request.Method.GET, BASE_URL, null,
+            { response ->
+                val newsArticles = parseJson(response)
+                listener.onResponse(newsArticles)
+            },
+            { error -> listener.onError(error) })
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class NewsApi {
-    private static final String API_KEY = "9e5b9279212759a2a3a9291156491313";
-    private static final String BASE_URL = "https://gnews.io/api/v4/top-headlines?category=general&lang=en&country=gb&max=10&apikey=" + API_KEY;
-    private RequestQueue requestQueue;
-
-    public NewsApi(Context context) {
-        requestQueue = Volley.newRequestQueue(context.getApplicationContext());
+        requestQueue.add(request)
     }
 
-    public void fetchNews(final NewsResponseListener listener) {
-        JsonObjectRequest request = new JsonObjectRequest(
-                Request.Method.GET, BASE_URL, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        List<NewsArticle> newsArticles = parseJson(response);
-                        listener.onResponse(newsArticles);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        listener.onError(error);
-                    }
-                });
-
-        requestQueue.add(request);
-    }
-
-    private List<NewsArticle> parseJson(JSONObject response) {
-        List<NewsArticle> articles = new ArrayList<>();
+    private fun parseJson(response: JSONObject): List<NewsArticle> {
+        val articles: MutableList<NewsArticle> = ArrayList()
         try {
-            JSONArray articlesArray = response.getJSONArray("articles");
+            val articlesArray = response.getJSONArray("articles")
 
-            for (int i = 0; i < articlesArray.length(); i++) {
-                JSONObject articleObj = articlesArray.getJSONObject(i);
+            for (i in 0..<articlesArray.length()) {
+                val articleObj = articlesArray.getJSONObject(i)
 
-                String title = articleObj.optString("title", "No Title");
-                String description = articleObj.optString("description", "No Description");
-                String imageUrl = articleObj.optString("image", "");
-                String url = articleObj.optString("url", "");
+                val title = articleObj.optString("title", "No Title")
+                val description = articleObj.optString("description", "No Description")
+                val imageUrl = articleObj.optString("image", "")
+                val url = articleObj.optString("url", "")
 
-                articles.add(new NewsArticle(title, description, imageUrl, url));
+                articles.add(NewsArticle(title, description, imageUrl, url))
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
+        } catch (e: JSONException) {
+            e.printStackTrace()
         }
-        return articles;
+        return articles
     }
 
-    public interface NewsResponseListener {
-        void onResponse(List<NewsArticle> response);
-        void onError(VolleyError error);
+    interface NewsResponseListener {
+        fun onResponse(response: List<NewsArticle>?)
+        fun onError(error: VolleyError?)
     }
 
+    companion object {
+        private const val API_KEY = "9e5b9279212759a2a3a9291156491313"
+        private const val BASE_URL =
+            "https://gnews.io/api/v4/top-headlines?category=general&lang=en&country=gb&max=10&apikey=" + API_KEY
+    }
 }

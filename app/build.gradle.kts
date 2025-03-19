@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
@@ -34,6 +35,9 @@ android {
         dataBinding = true
         viewBinding = true
     }
+    kotlinOptions {
+        jvmTarget = "11"
+    }
 }
 
 dependencies {
@@ -46,6 +50,13 @@ dependencies {
     implementation(libs.androidx.swiperefreshlayout)
     implementation(libs.volley)
     implementation(libs.bumptech)
+    implementation(libs.retrofit)
+    implementation(libs.retrofitConverterGson)
+    implementation(libs.gson)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.okhttplogging)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
