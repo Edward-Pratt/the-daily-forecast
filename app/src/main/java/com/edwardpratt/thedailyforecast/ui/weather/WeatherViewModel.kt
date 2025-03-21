@@ -3,31 +3,40 @@ package com.edwardpratt.thedailyforecast.ui.weather
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.edwardpratt.thedailyforecast.model.WeatherResponse
 import com.edwardpratt.thedailyforecast.network.WeatherApiClient
-import retrofit2.Call
-import retrofit2.Callback
+import kotlinx.coroutines.launch
 import retrofit2.Response
 
 class WeatherViewModel : ViewModel() {
     private val _weatherData = MutableLiveData<WeatherResponse?>()
     val weatherData: LiveData<WeatherResponse?> get() = _weatherData
 
-    fun fetchWeather(latitude: Double, longitude: Double) {
-        val call = WeatherApiClient.instance.getWeather(latitude, longitude)
+    private val _locationName = MutableLiveData<String>()
+    val locationName: LiveData<String> get() = _locationName
 
-        call.enqueue(object : Callback<WeatherResponse> {
-            override fun onResponse(call: Call<WeatherResponse>, response: Response<WeatherResponse>) {
+    fun fetchWeather(latitude: Double, longitude: Double, cityName: String?) {
+        _locationName.value = cityName ?: "Unknown Location"
+
+        viewModelScope.launch {
+            try {
+                val response: Response<WeatherResponse> = WeatherApiClient.instance.getWeather(
+                    latitude,
+                    longitude,
+                    currentWeather = true,
+                    daily = "temperature_2m_max,temperature_2m_min",
+                    timezone = "auto"
+                )
+
                 if (response.isSuccessful) {
                     _weatherData.value = response.body()
                 } else {
                     _weatherData.value = null
                 }
-            }
-
-            override fun onFailure(call: Call<WeatherResponse>, t: Throwable) {
+            } catch (e: Exception) {
                 _weatherData.value = null
             }
-        })
+        }
     }
 }
