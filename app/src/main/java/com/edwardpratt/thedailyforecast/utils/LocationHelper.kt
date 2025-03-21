@@ -2,46 +2,89 @@ package com.edwardpratt.thedailyforecast.utils
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.location.Address
 import android.location.Geocoder
 import android.location.Location
-import android.util.Log
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.tasks.Task
-import java.util.Locale
+import android.location.LocationManager
+import android.os.Looper
+import com.google.android.gms.location.*
+import java.util.*
 
 class LocationHelper(private val context: Context) {
     private val fusedLocationClient: FusedLocationProviderClient =
         LocationServices.getFusedLocationProviderClient(context)
 
     @SuppressLint("MissingPermission")
-    fun getCurrentLocation(callback: (latitude: Double, longitude: Double, cityName: String?) -> Unit) {
-        val locationTask: Task<Location> = fusedLocationClient.lastLocation
+    fun getCurrentLocation(callback: (latitude: Double, longitude: Double, cityName: String) -> Unit) {
+        val locationRequest = LocationRequest.Builder(
+            Priority.PRIORITY_HIGH_ACCURACY,
+            5000 // 5 seconds
+        ).setWaitForAccurateLocation(false)
+            .setMinUpdateIntervalMillis(10000) // 10 seconds
+            .setMaxUpdateDelayMillis(20000) // 20 seconds
+            .build()
 
-        locationTask.addOnSuccessListener { location: Location? ->
-            if (location != null) {
-                val latitude = location.latitude
-                val longitude = location.longitude
-                val cityName = getCityName(latitude, longitude)
-                callback(latitude, longitude, cityName)
-            } else {
-                Log.e("LocationHelper", "Failed to get location")
-                callback(0.0, 0.0, null)
-            }
-        }.addOnFailureListener { exception ->
-            Log.e("LocationHelper", "Location error: ${exception.message}")
-            callback(0.0, 0.0, null)
-        }
+        fusedLocationClient.requestLocationUpdates(
+            locationRequest,
+            object : LocationCallback() {
+                override fun onLocationResult(locationResult: LocationResult) {
+                    val location = locationResult.lastLocation
+                    if (location != null) {
+                        val cityName = getCityName(location.latitude, location.longitude)
+                        callback(location.latitude, location.longitude, cityName)
+                        fusedLocationClient.removeLocationUpdates(this) // Stop updates after first fix
+                    } else {
+                        callback(0.0, 0.0, "Unknown Location")
+                    }
+                }
+            },
+            Looper.getMainLooper()
+        )
     }
 
-    private fun getCityName(latitude: Double, longitude: Double): String? {
+    @SuppressLint("MissingPermission")
+    private fun requestNewLocation(callback: (latitude: Double, longitude: Double, cityName: String) -> Unit) {
+        val locationRequest = LocationRequest.Builder(
+            Priority.PRIORITY_HIGH_ACCURACY,
+            5000 // 5 seconds
+        ).setWaitForAccurateLocation(false)
+            .setMinUpdateIntervalMillis(10000) // 10 seconds
+            .setMaxUpdateDelayMillis(20000) // 20 seconds
+            .build()
+
+        fusedLocationClient.requestLocationUpdates(
+            locationRequest,
+            object : LocationCallback() {
+                override fun onLocationResult(locationResult: LocationResult) {
+                    val location = locationResult.lastLocation
+                    if (location != null) {
+                        val cityName = getCityName(location.latitude, location.longitude)
+                        callback(location.latitude, location.longitude, cityName)
+                        fusedLocationClient.removeLocationUpdates(this)
+                    } else {
+                        callback(0.0, 0.0, "Unknown Location")
+                    }
+                }
+            },
+            Looper.getMainLooper()
+        )
+    }
+
+    private fun getCityName(latitude: Double, longitude: Double): String {
         val geocoder = Geocoder(context, Locale.getDefault())
+
         return try {
-            val addresses = geocoder.getFromLocation(latitude, longitude, 1)
-            addresses?.get(0)?.locality
+            val addresses: List<Address> = geocoder.getFromLocation(latitude, longitude, 1)!!
+            if (addresses.isNotEmpty()) {
+                val city = addresses[0].locality // Try to get city name
+                val country = addresses[0].countryName ?: ""
+                if (!city.isNullOrEmpty()) city else addresses[0].adminArea ?: country
+            } else {
+                "Unknown Location"
+            }
         } catch (e: Exception) {
-            Log.e("LocationHelper", "Geocoder error: ${e.message}")
-            null
+            e.printStackTrace()
+            "Unknown Location"
         }
     }
 }

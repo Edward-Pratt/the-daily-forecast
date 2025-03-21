@@ -44,6 +44,11 @@ class WeatherFragment : Fragment() {
                 dailyWeatherAdapter = DailyWeatherAdapter(it.daily)
                 binding.recyclerView.adapter = dailyWeatherAdapter
             }
+            binding.swipeRefreshLayout.isRefreshing = false
+        }
+
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            requestLocationAndFetchWeather()
         }
 
         //viewModel.fetchWeather(50.72, -3.52, "Exeter") // Example coordinates
