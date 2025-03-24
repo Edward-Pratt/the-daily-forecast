@@ -1,8 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.google.ksp)
 }
-
 android {
     namespace = "com.edwardpratt.thedailyforecast"
     compileSdk = 35
@@ -58,6 +58,9 @@ dependencies {
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.okhttplogging)
     implementation(libs.playserviceslocation)
+    implementation(libs.roomruntime)
+    ksp(libs.roomcompiler)
+    implementation(libs.roomktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

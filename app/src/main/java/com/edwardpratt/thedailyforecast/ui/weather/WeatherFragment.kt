@@ -2,6 +2,7 @@ package com.edwardpratt.thedailyforecast.ui.weather
 
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.edwardpratt.thedailyforecast.databinding.FragmentWeatherBinding
 import com.edwardpratt.thedailyforecast.utils.LocationHelper
+import com.edwardpratt.thedailyforecast.utils.codeToSymbol
 
 class WeatherFragment : Fragment() {
     private var _binding: FragmentWeatherBinding? = null
@@ -30,19 +32,32 @@ class WeatherFragment : Fragment() {
         // Set up RecyclerView
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
-        viewModel = ViewModelProvider(this).get(WeatherViewModel::class.java)
+        viewModel = ViewModelProvider(this)[WeatherViewModel::class.java]
 
         viewModel.locationName.observe(viewLifecycleOwner, Observer { location ->
             binding.locationTextView.text = location
         })
 
         viewModel.weatherData.observe(viewLifecycleOwner) { weatherResponse ->
+            Log.d("WeatherDebug", "Weather response: $weatherResponse")
+
+            weatherResponse?.daily?.let { daily ->
+                Log.d("WeatherDebug", "Daily weather data received: ${daily.time}")
+            } ?: Log.e("WeatherDebug", "Daily weather data is NULL!")
+
             weatherResponse?.let {
                 binding.tvCurrentTemp.text = "${it.current_weather.temperature}°C"
+                binding.tvWindSpeed.text = "Wind: ${it.current_weather.windSpeed} km/h"
+                binding.tvWindDirection.text = "Dir: ${it.current_weather.windDirection}°"
+
+                val weatherIcon = codeToSymbol.getWeatherIcon(it.current_weather.weather_code)
+                binding.weatherIcon.setImageResource(weatherIcon)
 
                 // Set up RecyclerView Adapter
-                dailyWeatherAdapter = DailyWeatherAdapter(it.daily)
-                binding.recyclerView.adapter = dailyWeatherAdapter
+                if (it.daily != null && it.daily.time?.isNotEmpty() == true) {
+                    dailyWeatherAdapter = DailyWeatherAdapter(it.daily)
+                    binding.recyclerView.adapter = dailyWeatherAdapter
+                }
             }
             binding.swipeRefreshLayout.isRefreshing = false
         }
@@ -50,8 +65,6 @@ class WeatherFragment : Fragment() {
         binding.swipeRefreshLayout.setOnRefreshListener {
             requestLocationAndFetchWeather()
         }
-
-        //viewModel.fetchWeather(50.72, -3.52, "Exeter") // Example coordinates
 
         requestLocationAndFetchWeather()
 

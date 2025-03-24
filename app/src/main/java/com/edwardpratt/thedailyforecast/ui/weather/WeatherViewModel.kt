@@ -25,7 +25,7 @@ class WeatherViewModel : ViewModel() {
                     latitude,
                     longitude,
                     currentWeather = true,
-                    daily = "temperature_2m_max,temperature_2m_min",
+                    daily = "temperature_2m_max,temperature_2m_min,weather_code",
                     timezone = "auto"
                 )
 

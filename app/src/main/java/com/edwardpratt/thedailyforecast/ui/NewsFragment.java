@@ -23,10 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NewsFragment extends Fragment {
-    private RecyclerView recyclerView;
     private NewsAdapter newsAdapter;
     private List<NewsArticle> newsList;
-    private ProgressBar progressBar;
     private SwipeRefreshLayout swipeRefreshLayout;
 
 
@@ -36,8 +34,8 @@ public class NewsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_news, container, false);
 
-        recyclerView = view.findViewById(R.id.newsRecyclerView);
-        progressBar = view.findViewById(R.id.progressBar);
+        RecyclerView recyclerView = view.findViewById(R.id.newsRecyclerView);
+        ProgressBar progressBar = view.findViewById(R.id.progressBar);
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

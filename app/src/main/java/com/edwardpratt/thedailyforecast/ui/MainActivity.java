@@ -7,12 +7,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 
 import com.edwardpratt.thedailyforecast.databinding.ActivityMainBinding;
+import com.edwardpratt.thedailyforecast.ui.finance.FinanceFragment;
 import com.edwardpratt.thedailyforecast.ui.weather.WeatherFragment;
 import com.edwardpratt.thedailyforecast.R;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
-    private ActionBarDrawerToggle toggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(binding.toolbar);
 
         // Set up Navigation Drawer
-        toggle = new ActionBarDrawerToggle(this, binding.drawerLayout, binding.toolbar,
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, binding.drawerLayout, binding.toolbar,
                 R.string.nav_open, R.string.nav_close);
         binding.drawerLayout.addDrawerListener(toggle);
         toggle.syncState();

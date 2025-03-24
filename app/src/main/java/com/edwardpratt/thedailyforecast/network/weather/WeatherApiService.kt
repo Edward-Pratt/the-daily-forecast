@@ -11,7 +11,7 @@ interface WeatherApiService {
         @Query("latitude") lat: Double,
         @Query("longitude") lon: Double,
         @Query("current_weather") currentWeather: Boolean = true,
-        @Query("daily") daily: String = "temperature_2m_max,temperature_2m_min,precipitation_sum",  // Example valid daily query
+        @Query("daily") daily: String = "weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum",  // Example valid daily query
         @Query("timezone") timezone: String = "auto"
     ): Response<WeatherResponse>
 }

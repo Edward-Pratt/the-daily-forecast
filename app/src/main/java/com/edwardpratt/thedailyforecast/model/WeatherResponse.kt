@@ -8,12 +8,16 @@ data class WeatherResponse(
 )
 
 data class CurrentWeather(
-    @SerializedName("temperature") val temperature: Double,
-    @SerializedName("weathercode") val weatherCode: Int
+    @SerializedName("temperature") val temperature: Double?,
+    @SerializedName("weather_code") val weather_code: Int?,
+    @SerializedName("winddirection") val windDirection: Int?,
+    @SerializedName("windspeed") val windSpeed: Double,
+
 )
 
 data class DailyWeather(
-    @SerializedName("time") val time: List<String>,
-    @SerializedName("temperature_2m_max") val temperature_2m_max: List<Double>,
-    @SerializedName("temperature_2m_min") val temperature_2m_min: List<Double>
+    @SerializedName("time") val time: List<String>?,
+    @SerializedName("weather_code") val weather_code: List<Int>?,
+    @SerializedName("temperature_2m_max") val temperature_2m_max: List<Double>?,
+    @SerializedName("temperature_2m_min") val temperature_2m_min: List<Double>?
 )
