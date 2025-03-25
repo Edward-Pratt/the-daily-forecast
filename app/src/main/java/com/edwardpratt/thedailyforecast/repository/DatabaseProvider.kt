@@ -2,6 +2,8 @@ package com.edwardpratt.thedailyforecast.repository
 
 import android.content.Context
 import androidx.room.Room
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.edwardpratt.thedailyforecast.model.AppDatabase
 
 object DatabaseProvider {
@@ -14,7 +16,8 @@ object DatabaseProvider {
                 context.applicationContext,
                 AppDatabase::class.java,
                 "finance_database"
-            ).build()
+            )
+                .build()
             INSTANCE = instance
             instance
         }

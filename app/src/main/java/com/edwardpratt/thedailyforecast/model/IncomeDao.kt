@@ -11,4 +11,7 @@ interface IncomeDao {
 
     @Query("SELECT * FROM incomes ORDER BY date DESC")
     suspend fun getAllIncomes(): List<IncomeEntity>
+
+    @Query("DELETE FROM incomes WHERE id = :incomeId")
+    suspend fun deleteIncome(incomeId: Long)
 }

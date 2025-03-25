@@ -33,7 +33,7 @@
         android:text="Description" />
 
     <ImageButton
-        android:id="@+id/btnDeleteExpense"
+        android:id="@+id/btnDeleteIncome"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:background="?attr/selectableItemBackground"

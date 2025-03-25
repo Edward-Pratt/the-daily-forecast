@@ -5,10 +5,15 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.edwardpratt.thedailyforecast.model.CategoryEntity
 import com.edwardpratt.thedailyforecast.model.ExpenseEntity
 import com.edwardpratt.thedailyforecast.model.IncomeEntity
 import com.edwardpratt.thedailyforecast.repository.FinanceRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
+
 
 class FinanceViewModel(application: Application) : AndroidViewModel(application) {
     private val repository = FinanceRepository(application)
@@ -19,34 +24,72 @@ class FinanceViewModel(application: Application) : AndroidViewModel(application)
     private val _incomes = MutableLiveData<List<IncomeEntity>>()
     val incomes: LiveData<List<IncomeEntity>> get() = _incomes
 
+    // LiveData for all categories
+    val allCategories: LiveData<List<CategoryEntity>> = repository.getCategories()
+
     init {
-        loadExpenses()
-        loadIncomes()
+        loadFinanceData()
     }
 
-    fun loadExpenses() {
-        viewModelScope.launch {
-            _expenses.value = repository.getExpenses()
+    // Load expenses and incomes from the repository
+    fun loadFinanceData() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val expensesList = repository.getExpenses()
+            val incomesList = repository.getIncomes()
+
+            withContext(Dispatchers.Main) {
+                _expenses.value = expensesList
+                _incomes.value = incomesList
+            }
         }
     }
 
-    fun loadIncomes(){
-        viewModelScope.launch {
-            _incomes.value = repository.getIncomes()
-        }
-    }
-
+    // Add a new expense
     fun addExpense(expense: ExpenseEntity) {
         viewModelScope.launch {
             repository.addExpense(expense)
-            loadExpenses() // Refresh data after insertion
+            loadFinanceData() // Refresh data after insertion
         }
     }
 
+    // Delete an expense
+    fun deleteExpense(expense: ExpenseEntity) {
+        viewModelScope.launch {
+            repository.deleteExpense(expense)
+            loadFinanceData()
+        }
+    }
+
+    // Add a new income
     fun addIncome(income: IncomeEntity) {
         viewModelScope.launch {
             repository.addIncome(income)
-            loadIncomes() // Refresh data after insertion
+            loadFinanceData() // Refresh data after insertion
         }
     }
+
+    // Delete an income
+    fun deleteIncome(income: IncomeEntity) {
+        viewModelScope.launch {
+            repository.deleteIncome(income)
+            loadFinanceData()
+        }
+    }
+
+    // Add a new category
+    fun addCategory(name: String, type: String) {
+        val category = CategoryEntity(name = name, categoryType = type)  // Create a CategoryEntity
+        viewModelScope.launch {
+            repository.insertCategory(category)  // Pass the CategoryEntity
+        }
+
+        val updatedCategories = repository.getCategories()
+    }
+
+    fun deleteCategoryByName(name: String, type: String) {
+        viewModelScope.launch {
+            repository.deleteCategoryByName(name, type)
+        }
+    }
+
 }
