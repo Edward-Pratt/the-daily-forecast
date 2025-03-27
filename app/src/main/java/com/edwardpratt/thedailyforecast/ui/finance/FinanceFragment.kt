@@ -154,7 +154,6 @@ class FinanceFragment : Fragment() {
 
         // Get views from the dialog
         val spinnerCategory = dialogView.findViewById<Spinner>(R.id.spinnerCategory)
-        val btnAddNewCategory = dialogView.findViewById<Button>(R.id.btnAddNewCategory)
         val etAmount = dialogView.findViewById<EditText>(R.id.etAmount)
         val etDescription = dialogView.findViewById<EditText>(R.id.etDescription)
         val etDate = dialogView.findViewById<EditText>(R.id.etDate)
