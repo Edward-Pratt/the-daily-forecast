@@ -1,69 +1,66 @@
-package com.edwardpratt.thedailyforecast.ui;
+package com.edwardpratt.thedailyforecast.ui
 
-import android.os.Bundle;
+import android.os.Bundle
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
+import com.edwardpratt.thedailyforecast.R
+import com.edwardpratt.thedailyforecast.databinding.ActivityMainBinding
+import com.edwardpratt.thedailyforecast.ui.finance.FinanceFragment
+import com.edwardpratt.thedailyforecast.ui.home.HomeFragment
+import com.edwardpratt.thedailyforecast.ui.weather.WeatherFragment
+import com.google.android.material.navigation.NavigationView
 
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.GravityCompat;
+class MainActivity : AppCompatActivity() {
 
-import com.edwardpratt.thedailyforecast.databinding.ActivityMainBinding;
-import com.edwardpratt.thedailyforecast.ui.finance.FinanceFragment;
-import com.edwardpratt.thedailyforecast.ui.weather.WeatherFragment;
-import com.edwardpratt.thedailyforecast.R;
+    private lateinit var binding: ActivityMainBinding
 
-public class MainActivity extends AppCompatActivity {
-    private ActivityMainBinding binding;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
         // Enable View Binding
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         // Set up Toolbar
-        setSupportActionBar(binding.toolbar);
+        setSupportActionBar(binding.toolbar)
 
         // Set up Navigation Drawer
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, binding.drawerLayout, binding.toolbar,
-                R.string.nav_open, R.string.nav_close);
-        binding.drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
+        val toggle = ActionBarDrawerToggle(
+            this, binding.drawerLayout, binding.toolbar,
+            R.string.nav_open, R.string.nav_close
+        )
+        binding.drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
 
         // Handle Navigation Item Clicks
-        binding.navView.setNavigationItemSelectedListener(item -> {
-            int id = item.getItemId();
-            if (id == R.id.nav_weather) {
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, new WeatherFragment())
-                        .commit();
-            } else if (id == R.id.nav_news) {
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, new NewsFragment())
-                        .commit();
-            } else if (id == R.id.nav_finance) {
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, new FinanceFragment())
-                        .commit();
+        binding.navView.setNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_weather -> loadFragment(WeatherFragment())
+                R.id.nav_news -> loadFragment(NewsFragment())
+                R.id.nav_finance -> loadFragment(FinanceFragment())
+                R.id.nav_home -> loadFragment(HomeFragment())
             }
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
+            true
+        }
 
-            binding.drawerLayout.closeDrawer(GravityCompat.START);
-            return true;
-        });
-
-        // Load Default Fragment
+        // Load Default Fragment if no saved state
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new WeatherFragment())
-                    .commit();
-            binding.navView.setCheckedItem(R.id.nav_weather);
+            loadFragment(HomeFragment())  // Default to HomeFragment
+            binding.navView.setCheckedItem(R.id.nav_home)
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        binding = null; // Prevent memory leaks
+    // Helper function to load fragments
+    private fun loadFragment(fragment: androidx.fragment.app.Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commit()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // No need to set binding to null, ViewBinding handles this automatically.
     }
 }

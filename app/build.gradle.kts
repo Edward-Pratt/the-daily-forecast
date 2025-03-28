@@ -59,6 +59,8 @@ dependencies {
     implementation(libs.okhttplogging)
     implementation(libs.playserviceslocation)
     implementation(libs.roomruntime)
+    implementation(libs.datastorepreferences)
+    implementation(libs.datastore)
     ksp(libs.roomcompiler)
     implementation(libs.roomktx)
     testImplementation(libs.junit)

@@ -21,6 +21,7 @@ okhttp-logging = "4.11.0"
 play-services-location-version = "21.3.0"
 room =  "2.6.1"
 ksp = "2.1.20-1.0.31"
+datastore = "1.1.4"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -45,6 +46,8 @@ playserviceslocation = { module = "com.google.android.gms:play-services-location
 roomruntime = { module = "androidx.room:room-runtime", version.ref = "room" }
 roomktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 roomcompiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+datastore = {module = "androidx.datastore:datastore", version.ref = "datastore"}
+datastorepreferences = {module = "androidx.datastore:datastore-preferences", version.ref = "datastore"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

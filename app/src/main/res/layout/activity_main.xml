@@ -24,11 +24,15 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             app:title="The Daily Forecast" />
 
+
+
         <!-- Fragment Container -->
         <FrameLayout
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
+
     </LinearLayout>
 
     <!-- Navigation Drawer -->

@@ -4,11 +4,13 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.edwardpratt.thedailyforecast.model.CategoryEntity
 import com.edwardpratt.thedailyforecast.model.ExpenseEntity
 import com.edwardpratt.thedailyforecast.model.IncomeEntity
 import com.edwardpratt.thedailyforecast.repository.FinanceRepository
+import com.edwardpratt.thedailyforecast.utils.DataStoreManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -16,7 +18,11 @@ import kotlinx.coroutines.withContext
 
 
 class FinanceViewModel(application: Application) : AndroidViewModel(application) {
+    private val dataStore = DataStoreManager(application)
     private val repository = FinanceRepository(application)
+
+
+    val currency: LiveData<String> = dataStore.currencyFlow.asLiveData()
 
     private val _expenses = MutableLiveData<List<ExpenseEntity>>()
     val expenses: LiveData<List<ExpenseEntity>> get() = _expenses
@@ -89,6 +95,13 @@ class FinanceViewModel(application: Application) : AndroidViewModel(application)
     fun deleteCategoryByName(name: String, type: String) {
         viewModelScope.launch {
             repository.deleteCategoryByName(name, type)
+        }
+    }
+
+
+    fun updateCurrency(currency: String) {
+        viewModelScope.launch {
+            dataStore.setCurrency(currency)
         }
     }
 

@@ -73,17 +73,17 @@ class FinanceFragment : Fragment() {
             binding.rvExpenses.adapter = expenseAdapter
         }
 
-        viewModel.incomes.observe(viewLifecycleOwner) { incomes ->
-            val totalIncome = incomes.sumOf { it.amount }
-            binding.tvTotalIncome.text = "Total Incomes: $totalIncome"
+        viewModel.currency.observe(viewLifecycleOwner) { currency ->
+            viewModel.incomes.observe(viewLifecycleOwner) { incomes ->
+                val totalIncome = incomes.sumOf { it.amount }
+                binding.tvTotalIncome.text = "Total Incomes: $currency$totalIncome"
+            }
+
+            viewModel.expenses.observe(viewLifecycleOwner) { expenses ->
+                val totalExpense = expenses.sumOf { it.amount }
+                binding.tvTotalExpenses.text = "Total Expenses: $currency$totalExpense"
+            }
         }
-
-        viewModel.expenses.observe(viewLifecycleOwner) { expenses ->
-            val totalExpense = expenses.sumOf { it.amount }
-            binding.tvTotalExpenses.text = "Total Expenses: $totalExpense"
-        }
-
-
 
 
 
