@@ -4,6 +4,8 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 
+
+// Data Access Object (DAO) for the IncomeEntity
 @Dao
 interface IncomeDao {
     @Insert

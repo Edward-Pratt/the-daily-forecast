@@ -13,10 +13,13 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import java.util.Locale
 
+// Class for finding the location of the device
 class LocationHelper(private val context: Context) {
     private val fusedLocationClient: FusedLocationProviderClient =
         LocationServices.getFusedLocationProviderClient(context)
 
+
+    // Function to get the current location of the device
     @SuppressLint("MissingPermission")
     fun getCurrentLocation(callback: (latitude: Double, longitude: Double, cityName: String) -> Unit) {
         val locationRequest = LocationRequest.Builder(
@@ -45,6 +48,7 @@ class LocationHelper(private val context: Context) {
         )
     }
 
+    // Function to request a new location update
     @SuppressLint("MissingPermission")
     private fun requestNewLocation(callback: (latitude: Double, longitude: Double, cityName: String) -> Unit) {
         val locationRequest = LocationRequest.Builder(
@@ -73,6 +77,7 @@ class LocationHelper(private val context: Context) {
         )
     }
 
+    // Function to get the city name from latitude and longitude
     private fun getCityName(latitude: Double, longitude: Double): String {
         val geocoder = Geocoder(context, Locale.getDefault())
 

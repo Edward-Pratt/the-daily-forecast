@@ -7,6 +7,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+// GNews API URL
 object WeatherApiClient {
     private const val BASE_URL = "https://api.open-meteo.com/"
 

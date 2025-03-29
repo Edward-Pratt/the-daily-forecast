@@ -37,10 +37,12 @@ class WeatherFragment : Fragment() {
         viewModel.fetchWeather(51.5074, -0.1278, "London")
         requestLocationAndFetchWeather()
 
+        // Watches for location change
         viewModel.locationName.observe(viewLifecycleOwner, Observer { location ->
             binding.locationTextView.text = location
         })
 
+        // Watches for weather data change
         viewModel.weatherData.observe(viewLifecycleOwner) { weatherResponse ->
             Log.d("WeatherDebug", "Weather response: $weatherResponse")
 

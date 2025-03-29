@@ -19,6 +19,7 @@ class WeatherViewModel : ViewModel() {
     fun fetchWeather(latitude: Double, longitude: Double, cityName: String?) {
         _locationName.value = cityName ?: "Unknown Location"
 
+        // Fetch weather data using Retrofit
         viewModelScope.launch {
             try {
                 val response: Response<WeatherResponse> = WeatherApiClient.instance.getWeather(

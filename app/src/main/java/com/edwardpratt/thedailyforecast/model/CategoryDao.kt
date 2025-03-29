@@ -3,10 +3,10 @@ package com.edwardpratt.thedailyforecast.model
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
 
+// Data Access Object (DAO) for the CategoryEntity
 @Dao
 interface CategoryDao {
     @Insert

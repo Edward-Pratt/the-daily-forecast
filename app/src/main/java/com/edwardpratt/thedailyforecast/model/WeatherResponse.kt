@@ -2,6 +2,8 @@ package com.edwardpratt.thedailyforecast.model
 
 import com.google.gson.annotations.SerializedName
 
+
+// Represents the response from the weather API
 data class WeatherResponse(
     @SerializedName("current_weather") val current_weather: CurrentWeather,
     @SerializedName("daily") val daily: DailyWeather

@@ -13,6 +13,7 @@ class NewsApi(context: Context) {
     private val requestQueue =
         Volley.newRequestQueue(context.applicationContext)
 
+    // Fetches news articles from the GNews API
     fun fetchNews(listener: NewsResponseListener) {
         val request = JsonObjectRequest(
             Request.Method.GET, BASE_URL, null,
@@ -25,6 +26,8 @@ class NewsApi(context: Context) {
         requestQueue.add(request)
     }
 
+
+    // Parses the JSON response from the GNews API
     private fun parseJson(response: JSONObject): List<NewsArticle> {
         val articles: MutableList<NewsArticle> = ArrayList()
         try {
@@ -46,6 +49,7 @@ class NewsApi(context: Context) {
         return articles
     }
 
+    // Interface for handling the response from the API
     interface NewsResponseListener {
         fun onResponse(response: List<NewsArticle>?)
         fun onError(error: VolleyError?)
@@ -54,6 +58,6 @@ class NewsApi(context: Context) {
     companion object {
         private const val API_KEY = "9e5b9279212759a2a3a9291156491313"
         private const val BASE_URL =
-            "https://gnews.io/api/v4/top-headlines?category=general&lang=en&country=gb&max=10&apikey=" + API_KEY
+            "https://gnews.io/api/v4/top-headlines?category=general&lang=en&country=gb&max=10&apikey=$API_KEY"
     }
 }

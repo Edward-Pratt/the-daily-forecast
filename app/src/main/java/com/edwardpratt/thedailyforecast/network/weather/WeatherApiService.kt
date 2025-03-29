@@ -5,6 +5,8 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
+
+// This is the interface for the Weather API service
 interface WeatherApiService {
     @GET("v1/forecast")
     suspend fun getWeather(

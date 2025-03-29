@@ -2,6 +2,7 @@ package com.edwardpratt.thedailyforecast.utils
 
 import com.edwardpratt.thedailyforecast.R
 
+// This object maps weather codes to drawable resource IDs for weather icons.
 object codeToSymbol {
     fun getWeatherIcon(weatherCode: Int?): Int {
         return when (weatherCode) {

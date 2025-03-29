@@ -25,6 +25,7 @@ class CategoryAdapter(
         return view
     }
 
+    // Override the getDropDownView method to set the long click listener for dropdown items
     override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view = super.getDropDownView(position, convertView, parent)
         view.setOnLongClickListener {

@@ -3,7 +3,7 @@ package com.edwardpratt.thedailyforecast.model
 import androidx.room.Database
 import androidx.room.RoomDatabase
 
-
+//Database class for the app
 @Database(entities = [ExpenseEntity::class, IncomeEntity::class, CategoryEntity::class], version = 1)
 abstract class AppDatabase : RoomDatabase(){
     abstract fun expenseDao(): ExpenseDao
