@@ -29,10 +29,11 @@ The app is built using **Kotlin** and leverages Android's core features, includi
    - The app uses **LinearLayout**, **ConstraintLayout**, and **RecyclerView** to create a clean and flexible UI. The layouts are optimized for different screen sizes and orientations to ensure responsiveness.
 
 3. **Data Storage**:
-   - **SharedPreferences** is used to store user preferences, such as their preferred units for weather (Celsius/Fahrenheit) and last viewed sections (e.g., Weather or Finance).
+   - A **Room Database** is used to persistently store added incomes, expenses and categories they may add for each
+   - **SharedPreferences** is used to store user preferences, such as their preferred unit of currency.
    - I used **RecyclerView** to display dynamic lists of weather data, news articles, and finance transactions, allowing efficient handling of large data sets.
 
-4. **Themes**:
+5. **Themes**:
    - The app features both **Light Mode** and **Dark Mode** themes. The UI adjusts automatically based on the user's system preferences to provide an optimal experience in both modes.
 
 ---
@@ -44,14 +45,14 @@ The app is built using **Kotlin** and leverages Android's core features, includi
 - The weather icons change dynamically based on the forecast (e.g., sun, clouds, rain).
 
 ### **News Section:**
-- News is fetched dynamically from a REST API and displayed in a **RecyclerView** with clickable items. Users can read detailed articles by navigating to a new screen.
+- News is fetched dynamically from a REST API and displayed in a **RecyclerView** with clickable items. Users can read detailed articles with an intent opening the browser app of thier choice.
 
 ### **Finance Section:**
 - Users can manage their finances by adding transactions, viewing their spending history, and seeing their monthly balance.
 - The app calculates the total balance dynamically based on user input.
 
 ### **User Preferences:**
-- The app allows users to set and store their preferences (e.g., temperature unit for weather, last viewed screen) using **SharedPreferences**.
+- The app allows users to set and store their preferences using **SharedPreferences**.
 
 ---
 
@@ -63,6 +64,8 @@ The app is built using **Kotlin** and leverages Android's core features, includi
    
 2. **Handling API Calls for Weather and News**:
    - Initially, integrating APIs for weather and news data was challenging due to inconsistent data formats. I handled this by writing custom data parsers and error handling.
+   - Due to needing to work with these API's, I decided to migrate the application to use kotlin.
+  
 
 ### **Future Improvements:**
 1. **Better Error Handling**:
@@ -74,6 +77,7 @@ The app is built using **Kotlin** and leverages Android's core features, includi
 3. **Additional Features**:
    - **Weather Maps**: Display interactive weather maps with radar imagery.
    - **Currency Conversion**: Integrate a currency conversion feature in the Finance section.
+
 
 ---
 
@@ -91,7 +95,7 @@ The app is built using **Kotlin** and leverages Android's core features, includi
    - The app opens on the **Home** screen, where users can navigate to the **Weather**, **News**, and **Finance** sections using the bottom navigation menu.
 
 4. **User Preferences**:
-   - In the **Settings** section, users can modify their preferences, such as temperature units and last viewed screen.
+   - In the **Settings** section, users can modify their preferences, such as currency.
 
 ---
 
