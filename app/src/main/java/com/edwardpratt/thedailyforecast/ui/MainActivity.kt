@@ -8,6 +8,7 @@ import com.edwardpratt.thedailyforecast.R
 import com.edwardpratt.thedailyforecast.databinding.ActivityMainBinding
 import com.edwardpratt.thedailyforecast.ui.finance.FinanceFragment
 import com.edwardpratt.thedailyforecast.ui.home.HomeFragment
+import com.edwardpratt.thedailyforecast.ui.settings.SettingsFragment
 import com.edwardpratt.thedailyforecast.ui.weather.WeatherFragment
 import com.google.android.material.navigation.NavigationView
 
@@ -40,6 +41,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_news -> loadFragment(NewsFragment())
                 R.id.nav_finance -> loadFragment(FinanceFragment())
                 R.id.nav_home -> loadFragment(HomeFragment())
+                R.id.nav_settings -> loadFragment(SettingsFragment())
             }
             binding.drawerLayout.closeDrawer(GravityCompat.START)
             true

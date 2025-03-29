@@ -1,9 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="primary">#1E3A8A</color>
-    <color name="secondary">#60A5FA</color>
-    <color name="accent">#E5E7EB</color>
+    <!-- Backgrounds -->
     <color name="background">#FFFFFF</color>
+    <color name="surface">#F5F5F5</color>
+
+    <!-- Primary Colors -->
+    <color name="colorPrimary">#6200EE</color> <!-- Primary color (for example, a shade of purple) -->
+    <color name="colorPrimaryVariant">#3700B3</color>
+    <color name="colorOnPrimary">#FFFFFF</color> <!-- White text/icons on primary color -->
+
+    <!-- Secondary Colors -->
+    <color name="colorSecondary">#03DAC6</color> <!-- Secondary accent color -->
+    <color name="colorSecondaryVariant">#018786</color>
+    <color name="colorOnSecondary">#000000</color> <!-- Black text/icons on secondary color -->
+
+    <!-- Text Colors -->
+    <color name="textPrimary">#000000</color> <!-- Black text -->
+    <color name="textSecondary">#757575</color> <!-- Slightly lighter text (gray) -->
+
+    <!-- Error Colors -->
+    <color name="colorError">#B00020</color>
+    <color name="colorOnError">#FFFFFF</color> <!-- White text/icons on error color -->
 </resources>

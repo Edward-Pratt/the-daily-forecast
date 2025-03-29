@@ -77,11 +77,19 @@ class LocationHelper(private val context: Context) {
         val geocoder = Geocoder(context, Locale.getDefault())
 
         return try {
-            val addresses: List<Address> = geocoder.getFromLocation(latitude, longitude, 1)!!
-            if (addresses.isNotEmpty()) {
-                val city = addresses[0].locality // Try to get city name
-                val country = addresses[0].countryName ?: ""
-                if (!city.isNullOrEmpty()) city else addresses[0].adminArea ?: country
+            // Request more results
+            val addresses: List<Address>? = geocoder.getFromLocation(latitude, longitude, 5)
+            if (addresses != null && addresses.isNotEmpty()) {
+                // Try to get city name (locality)
+                var city = addresses[0].locality
+                if (city.isNullOrEmpty()) {
+                    // If no city found, try admin area, sub-admin area, or sub locality
+                    city = addresses[0].adminArea
+                    if (city.isNullOrEmpty()) {
+                        city = addresses[0].subAdminArea ?: addresses[0].subLocality
+                    }
+                }
+                city ?: "Unknown Location"
             } else {
                 "Unknown Location"
             }
@@ -90,4 +98,6 @@ class LocationHelper(private val context: Context) {
             "Unknown Location"
         }
     }
+
+
 }
