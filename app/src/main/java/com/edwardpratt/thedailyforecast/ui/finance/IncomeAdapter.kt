@@ -11,7 +11,8 @@ import com.edwardpratt.thedailyforecast.model.IncomeEntity
 
 
 class IncomeAdapter(private var incomes: List<IncomeEntity>,
-                     private val onDeleteClick: (IncomeEntity) -> Unit
+                    private val onDeleteClick: (IncomeEntity) -> Unit,
+                    private var currency: String
 ) : RecyclerView.Adapter<IncomeAdapter.IncomeViewHolder>() {
 
     class IncomeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
@@ -31,7 +32,7 @@ class IncomeAdapter(private var incomes: List<IncomeEntity>,
     override fun onBindViewHolder(holder: IncomeViewHolder, position: Int) {
         val income = incomes[position]
         holder.tvCategory.text = income.category
-        holder.tvAmount.text = income.amount.toString()
+        holder.tvAmount.text = "$currency${income.amount}"
         holder.tvDescription.text = income.description
         holder.tvDate.text = income.date
 
@@ -45,8 +46,11 @@ class IncomeAdapter(private var incomes: List<IncomeEntity>,
         return incomes.size
     }
 
-    fun updateData(newIncomes: List<IncomeEntity>){
+    fun updateData(newIncomes: List<IncomeEntity>, newCurrency: String){
         incomes = newIncomes
+        currency = newCurrency
         notifyDataSetChanged()
     }
+
+
 }

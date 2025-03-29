@@ -30,9 +30,9 @@ class WeatherViewModel : ViewModel() {
                 )
 
                 if (response.isSuccessful) {
-                    _weatherData.value = response.body()
+                    _weatherData.postValue(response.body()) // Ensure UI updates correctly
                 } else {
-                    _weatherData.value = null
+                    _weatherData.postValue(null)
                 }
             } catch (e: Exception) {
                 _weatherData.value = null

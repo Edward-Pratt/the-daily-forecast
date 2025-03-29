@@ -19,12 +19,16 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.edwardpratt.thedailyforecast.R
 import com.edwardpratt.thedailyforecast.databinding.FragmentFinanceBinding
 import com.edwardpratt.thedailyforecast.model.CategoryEntity
 import com.edwardpratt.thedailyforecast.model.ExpenseEntity
 import com.edwardpratt.thedailyforecast.model.IncomeEntity
+import com.edwardpratt.thedailyforecast.utils.DataStoreManager
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 class FinanceFragment : Fragment() {
     private var _binding: FragmentFinanceBinding? = null
@@ -33,6 +37,8 @@ class FinanceFragment : Fragment() {
     private lateinit var viewModel: FinanceViewModel
     private lateinit var expenseAdapter: ExpenseAdapter
     private lateinit var incomeAdapter: IncomeAdapter
+    private lateinit var dataStoreManager: DataStoreManager
+    private var currency: String = "£"
 
 
 
@@ -40,6 +46,12 @@ class FinanceFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentFinanceBinding.inflate(inflater, container, false)
+
+        dataStoreManager = DataStoreManager(requireContext())
+
+        lifecycleScope.launch{
+            currency = dataStoreManager.currencyFlow.first()
+        }
         return binding.root
     }
 
@@ -49,27 +61,28 @@ class FinanceFragment : Fragment() {
 
 
 
+
         binding.rvIncomes.layoutManager = LinearLayoutManager(requireContext())
-        incomeAdapter = IncomeAdapter(emptyList()) { income ->
+        incomeAdapter = IncomeAdapter(emptyList(), { income ->
             viewModel.deleteIncome(income)
-        }
+        }, currency) // Pass currency
         binding.rvIncomes.adapter = incomeAdapter
 
         // Set up RecyclerView
         binding.rvExpenses.layoutManager = LinearLayoutManager(requireContext())
-        expenseAdapter = ExpenseAdapter(emptyList()) { expense ->
+        expenseAdapter = ExpenseAdapter(emptyList(), { expense ->
             viewModel.deleteExpense(expense)
-        }
+        }, currency) // Pass currency
         binding.rvExpenses.adapter = expenseAdapter
 
         viewModel.incomes.observe(viewLifecycleOwner) { incomes ->
-            incomeAdapter.updateData(incomes)
+            incomeAdapter.updateData(incomes, currency)
             binding.rvIncomes.adapter = incomeAdapter
         }
 
         // Observe expenses and income
         viewModel.expenses.observe(viewLifecycleOwner) { expenses ->
-            expenseAdapter.updateData(expenses)
+            expenseAdapter.updateData(expenses, currency)
             binding.rvExpenses.adapter = expenseAdapter
         }
 

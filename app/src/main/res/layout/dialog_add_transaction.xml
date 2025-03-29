@@ -19,7 +19,8 @@
         android:id="@+id/etAmount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter amount"
+        android:hint="@string/enter_amount"
+        android:autofillHints=""
         android:inputType="numberDecimal"
         android:layout_marginTop="8dp" />
 
@@ -37,7 +38,8 @@
         android:id="@+id/etDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Select date"
+        android:autofillHints=""
+        android:hint="@string/select_date"
         android:focusable="false"
         android:layout_marginTop="8dp" />
 

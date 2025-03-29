@@ -11,6 +11,7 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_gravity="center"
+        android:contentDescription="@string/sunny_weather"
         android:src="@drawable/ic_sunny" />
 
 

@@ -34,6 +34,9 @@ class WeatherFragment : Fragment() {
 
         viewModel = ViewModelProvider(this)[WeatherViewModel::class.java]
 
+        viewModel.fetchWeather(51.5074, -0.1278, "London")
+        requestLocationAndFetchWeather()
+
         viewModel.locationName.observe(viewLifecycleOwner, Observer { location ->
             binding.locationTextView.text = location
         })
@@ -66,7 +69,7 @@ class WeatherFragment : Fragment() {
             requestLocationAndFetchWeather()
         }
 
-        requestLocationAndFetchWeather()
+
 
         return view
     }
@@ -81,7 +84,12 @@ class WeatherFragment : Fragment() {
 
         val locationHelper = LocationHelper(requireContext())
         locationHelper.getCurrentLocation { latitude, longitude, cityName ->
-            viewModel.fetchWeather(latitude, longitude, cityName)
+            if (latitude != null && longitude != null) {
+                viewModel.fetchWeather(latitude, longitude, cityName)
+            } else {
+                // Fallback: Load weather for a default location (e.g., London)
+                viewModel.fetchWeather(51.5074, -0.1278, "London")
+            }
         }
     }
 

@@ -8,10 +8,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.edwardpratt.thedailyforecast.R
 import com.edwardpratt.thedailyforecast.model.ExpenseEntity
-import com.edwardpratt.thedailyforecast.ui.NewsAdapter
 
 class ExpenseAdapter(private var expenses: List<ExpenseEntity>,
-    private val onDeleteClick: (ExpenseEntity) -> Unit
+    private val onDeleteClick: (ExpenseEntity) -> Unit,
+    private var currency: String
 ) : RecyclerView.Adapter<ExpenseAdapter.ExpenseViewHolder>() {
 
     class ExpenseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
@@ -31,7 +31,7 @@ class ExpenseAdapter(private var expenses: List<ExpenseEntity>,
     override fun onBindViewHolder(holder: ExpenseViewHolder, position: Int) {
         val expense = expenses[position]
         holder.tvCategory.text = expense.category
-        holder.tvAmount.text = expense.amount.toString()
+        holder.tvAmount.text = "$currency${expense.amount}"
         holder.tvDescription.text = expense.description
         holder.tvDate.text = expense.date
 
@@ -45,8 +45,9 @@ class ExpenseAdapter(private var expenses: List<ExpenseEntity>,
         return expenses.size
     }
 
-    fun updateData(newExpenses: List<ExpenseEntity>){
+    fun updateData(newExpenses: List<ExpenseEntity>, newCurrency: String){
         expenses = newExpenses
+        currency = newCurrency
         notifyDataSetChanged()
     }
 }
