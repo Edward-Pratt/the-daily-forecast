@@ -5,6 +5,7 @@ import com.android.volley.Request
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.edwardpratt.thedailyforecast.BuildConfig
 import com.edwardpratt.thedailyforecast.model.NewsArticle
 import org.json.JSONException
 import org.json.JSONObject
@@ -56,8 +57,8 @@ class NewsApi(context: Context) {
     }
 
     companion object {
-        private const val API_KEY = "9e5b9279212759a2a3a9291156491313"
-        private const val BASE_URL =
+        private val API_KEY = BuildConfig.GNEWS_API_KEY
+        private val BASE_URL =
             "https://gnews.io/api/v4/top-headlines?category=general&lang=en&country=gb&max=10&apikey=$API_KEY"
     }
 }

@@ -1,8 +1,16 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.ksp)
 }
+
+val localProperties = Properties().apply {
+    val file = rootProject.file("local.properties")
+    if (file.exists()) file.inputStream().use { load(it) }
+}
+
 android {
     namespace = "com.edwardpratt.thedailyforecast"
     compileSdk = 35
@@ -15,6 +23,9 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // GNews API key, read from local.properties (not committed)
+        buildConfigField("String", "GNEWS_API_KEY", "\"${localProperties.getProperty("GNEWS_API_KEY", "")}\"")
     }
 
     buildTypes {
@@ -34,6 +45,7 @@ android {
     buildFeatures{
         dataBinding = true
         viewBinding = true
+        buildConfig = true
     }
     kotlinOptions {
         jvmTarget = "11"
